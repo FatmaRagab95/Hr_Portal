@@ -4,6 +4,7 @@ import login from '@/components/login'
 import home from '@/components/home'
 import workRequest from '@/components/Hr_portal/workRequest/workRequest'
 import Employee from '@/components/Hr_portal/Employee/Employee'
+import vacationRequest from '@/components/Hr_portal/vacationRequest/vacationRequest'
 
 Vue.use(Router)
 
@@ -37,6 +38,14 @@ const router = new Router({
       component: Employee,
       meta: {
         requiresAuth:true
+      }
+    },
+    {
+      path: '/vacation-request',
+      name: 'vacationRequest',
+      component: vacationRequest,
+      meta: {
+        requiresAuth:false
       }
     }
   ]
