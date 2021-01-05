@@ -48,7 +48,7 @@
           </li>
           <li>
             <router-link :to="{ name: 'vacationRequest' }">
-              <span class="link-text">Vacation Request</span>
+              <span class="link-text">Vacation Request 1</span>
             </router-link>
           </li>
         </ul>
