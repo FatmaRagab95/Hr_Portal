@@ -39,6 +39,11 @@
                             <span class="link-text">Work Request</span>
                         </router-link>
                     </li>
+                    <li>
+                        <router-link :to="{name:'Employee'}">
+                            <span class="link-text">Employee</span>
+                        </router-link>
+                    </li>
                 </ul>
             </li>
         </ul>

@@ -30,7 +30,7 @@ export default {
                 user_name:'',
                 pass_word:''
             },
-            apiUrl:"http://localhost:50450/app/dist/"
+            apiUrl:"http://localhost:62477/app/dist/"
         }
     },
     methods: {
