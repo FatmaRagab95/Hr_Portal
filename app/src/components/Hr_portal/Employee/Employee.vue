@@ -2,7 +2,6 @@
     	<div class='Courses internal-page' id='Employee'>
 		
 		<h1 class="text-secondary">
-			<!-- <img src='../../../assets/layout/img/course.png' alt='courses'/> -->
 			Welcome to your dashboard {{user.FullName}}
 		</h1>
 
