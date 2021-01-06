@@ -1,8 +1,8 @@
 <template>
-  <div class="Courses internal-page" id="Vacation_Request">
+  <div class="Courses internal-page" id="Employee_Vacation">
     <h1>
       <img src="../../../assets/layout/img/course.png" alt="courses" />
-      Vacation Request Form
+      Employee Vacation Form
     </h1>
 
     <div class="custom-form create-course">
@@ -17,64 +17,28 @@
               <!-- employee id -->
               <div class="cu-field col-md-6">
                 <h3 class="cu-label">
-                  <label>Employee Id :</label>
+                  <label>Employee Name:</label>
                 </h3>
                 <div class="cu-input text-box">
                   <span class="fa fa-edit"></span>
-                  <select
-                    id="Employees"
-                    class="form-control"
-                    v-model="impId"
-                    @change="NewHR_Vacations_Requests.Delegation_EmpName = ''"
-                  >
-                    <option value="" selected="selected">..</option>
-                    <option
-                      v-for="user in adminusersData"
-                      :value="user.Emp_ID"
-                      :key="user.Emp_ID"
-                    >
-                      {{ user.Emp_ID }}
-                    </option>
-                  </select>
+                  <div>{{ user.FullName }}</div>
                 </div>
               </div>
 
               <!-- employee name -->
               <div class="cu-field col-md-6">
                 <h3 class="cu-label">
-                  <label>Employee Name :</label>
+                  <label>Employee Id:</label>
                 </h3>
                 <div class="cu-input text-box">
                   <span class="fa fa-edit"></span>
-                  <div>{{ impName }}</div>
-                </div>
-              </div>
-
-              <!-- department -->
-              <div class="cu-field col-md-6">
-                <h3 class="cu-label">
-                  <label>Department Name :</label>
-                </h3>
-                <div class="cu-input text-box">
-                  <span class="fa fa-edit"></span>
-                  <div>{{ impDept }}</div>
-                </div>
-              </div>
-
-              <!-- Branch Name -->
-              <div class="cu-field col-md-6">
-                <h3 class="cu-label">
-                  <label>Branch Name :</label>
-                </h3>
-                <div class="cu-input text-box">
-                  <span class="fa fa-edit"></span>
-                  <div>{{ impBranch }}</div>
+                  <div>{{ user.Emp_id }}</div>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- delegated to -->
+          <!-- elegated to -->
           <div class="grouped shadow-sm rounded">
             <div class="cu-field6">
               <h3 class="cu-label">
@@ -88,7 +52,6 @@
                 <option
                   v-for="user in adminusersData"
                   :key="user.Emp_ID"
-                  v-if="user.Emp_ID != impId"
                   :value="user.FullName"
                   @click="NewHR_Vacations_Requests.Delegation_EmpCode = user.Emp_ID"
                 >
@@ -341,9 +304,13 @@
 
           <!-- attachment file -->
           <div
-            class="grouped shadow-sm rounded Courses" 
-            v-show="attach.includes(NewHR_Vacations_Requests.Vacation_Type_name) || NewHR_Vacations_Requests.Deduction_name == 'Unpaid'">
-             <h3 class="cu-label">
+            class="grouped shadow-sm rounded Courses"
+            v-show="
+              attach.includes(NewHR_Vacations_Requests.Vacation_Type_name) ||
+              NewHR_Vacations_Requests.Deduction_name == 'Unpaid'
+            "
+          >
+            <h3 class="cu-label">
               <label>Please attach file here:</label>
             </h3>
             <div class="cu-input text-box">
@@ -355,7 +322,7 @@
                       : "Choose file..."
                   }}
                 </label>
-               <!-- <asp:FileUpload
+                <!--<asp:FileUpload
                   runat="server"
                   ID="fuSample"
                   v-model="NewHR_Vacations_Requests.Attach_File"
@@ -456,18 +423,13 @@
 
 <script>
 export default {
-  name: "vacationRequest",
+  name: "employeeVacation",
   data() {
     return {
-      user: JSON.parse(localStorage.getItem('user')),
+      user: JSON.parse(localStorage.getItem("user")),
       adminusersData: null,
       Vacations: null,
       daysOff: [],
-
-      impId: "",
-      impName: "",
-      impDept: "",
-      impBranch: "",
 
       startDate: "",
       endDate: "",
@@ -490,7 +452,6 @@ export default {
       Employees_Balance: [],
 
       NewHR_Vacations_Requests: {
-        Requester_id: 1,
         Delegation_EmpCode: 0,
         Delegation_EmpName: "",
         Deduction_id: 1,
@@ -510,28 +471,7 @@ export default {
       apiUrl: "http://localhost:56438/app/dist/",
     };
   },
-
   methods: {
-    offDays: function (impId) {
-      let that = this;
-
-      //get daysOff
-      if (impId !== "") {
-        $.ajax({
-          type: "POST",
-          url: that.apiUrl + "Hr_Portal/Vacation_Request.aspx/getDaysOffData",
-          data: JSON.stringify({ detail: { Emp_id: impId } }),
-          contentType: "application/json; charset=utf-8",
-          dataType: "json",
-          success: function (data) {
-            that.daysOff = JSON.parse(data.d);
-          },
-        });
-      } else {
-        that.daysOff = [];
-      }
-    },
-
     checkDay: function (exp, day) {
       return (new Date(exp) - new Date(day)) / (24 * 60 * 60 * 1000) >= 0;
     },
@@ -543,7 +483,6 @@ export default {
         type = ObjectD.Vacation_Type_name.trim(),
         Days = that.multiDates,
         DaysNum = Days.length;
-      ObjectD.Requester_id = that.impId;
 
       // get multi dates from calendar
       this.multiDates = Array.from(new Set(this.multiDates));
@@ -683,8 +622,7 @@ export default {
           // validate the off day that has been checked
           $.ajax({
             type: "POST",
-            url: that.apiUrl + "Hr_Portal/Vacation_Request.aspx/getDaysOffData",
-            data: JSON.stringify({ detail: { Emp_id: that.impId, Dept_id: that.user.Dept_id } }),
+            url: that.apiUrl + "Hr_Portal/Employee_Vacation.aspx/getDaysOffData",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (data) {
@@ -756,8 +694,7 @@ export default {
         else if (type == "Annual" || type == "Casual") {
           $.ajax({
             type: "POST",
-            url: that.apiUrl + "Hr_Portal/Vacation_Request.aspx/checkBalance",
-            data: JSON.stringify({ detail: { Emp_id: ObjectD.Requester_id } }),
+            url: that.apiUrl + "Hr_Portal/Employee_Vacation.aspx/checkBalance",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (data) {
@@ -825,7 +762,7 @@ export default {
                       $.ajax({
                         type: "POST",
                         url:
-                          that.apiUrl + "Hr_Portal/Vacation_Request.aspx/getPeriodsData",
+                          that.apiUrl + "Hr_Portal/Employee_Vacation.aspx/getPeriodsData",
                         data: JSON.stringify({
                           detail: { Emp_id: ObjectD.Requester_id },
                         }),
@@ -881,8 +818,7 @@ export default {
           function alert() {
             swal({
               title: "Not Allowed!",
-              text:
-                "The current vacation balance for this Employee is not enough to accept this request!",
+              text: "The current vacation balance is not enough to accept this request!",
               icon: "warning",
               dangerMode: true,
             });
@@ -896,7 +832,6 @@ export default {
 
         function sending() {
           ObjectD.Total_Days = parseInt(that.totalDayes);
-          ObjectD.Dept_id = that.user.Dept_id;
 
           swal({
             title: "Sending...",
@@ -907,7 +842,8 @@ export default {
 
           $.ajax({
             type: "POST",
-            url: that.apiUrl + "Hr_Portal/Vacation_Request.aspx/NewHR_Vacations_Requests",
+            url:
+              that.apiUrl + "Hr_Portal/Employee_Vacation.aspx/NewHR_Vacations_Requests",
             data: JSON.stringify({ HR_Vacations_Request: ObjectD }),
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -917,7 +853,7 @@ export default {
                   // update off days
                   return $.ajax({
                     type: "POST",
-                    url: that.apiUrl + "Hr_Portal/Vacation_Request.aspx/updateOffDays",
+                    url: that.apiUrl + "Hr_Portal/Employee_Vacation.aspx/updateOffDays",
                     data: JSON.stringify({
                       updateDays: { id: that.offDay.checked, Status: 6 },
                     }),
@@ -934,7 +870,7 @@ export default {
                     type: "POST",
                     url:
                       that.apiUrl +
-                      "Hr_Portal/Vacation_Request.aspx/NewHR_Vacations_Days",
+                      "Hr_Portal/Employee_Vacation.aspx/NewHR_Vacations_Days",
                     data: JSON.stringify({ Vacations_Days: that.multiDates[i] }),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
@@ -980,21 +916,7 @@ export default {
       }
     },
   },
-
   watch: {
-    impId: function () {
-      this.impBranch = this.adminusersData.filter(
-        (x) => x.Emp_ID == this.impId
-      )[0].Branch_name;
-      this.impName = this.adminusersData.filter(
-        (x) => x.Emp_ID == this.impId
-      )[0].FullName;
-      this.impDept = this.adminusersData.filter(
-        (x) => x.Emp_ID == this.impId
-      )[0].Dept_name;
-      this.offDays(this.impId);
-    },
-
     "NewHR_Vacations_Requests.End_date": function () {
       let dateFrom = this.NewHR_Vacations_Requests.Start_date,
         dateTo = this.NewHR_Vacations_Requests.End_date;
@@ -1010,8 +932,8 @@ export default {
     //get adminusers
     $.ajax({
       type: "POST",
-      url: cobject.apiUrl + "Hr_Portal/Vacation_Request.aspx/getadminusersData",
-      data: JSON.stringify({ dept_id: cobject.user.Dept_id}),
+      url: cobject.apiUrl + "Hr_Portal/Employee_Vacation.aspx/getadminusersData",
+      data: JSON.stringify({ user: { Emp_id: cobject.user.Emp_id } }),
       contentType: "application/json; charset=utf-8",
       dataType: "json",
       success: function (data) {
@@ -1022,12 +944,24 @@ export default {
     //get Vacation types
     $.ajax({
       type: "POST",
-      url: cobject.apiUrl + "Hr_Portal/Vacation_Request.aspx/gettypesData",
+      url: cobject.apiUrl + "Hr_Portal/Employee_Vacation.aspx/gettypesData",
       contentType: "application/json; charset=utf-8",
       dataType: "json",
       success: function (data) {
         cobject.types = JSON.parse(data.d);
         cobject.Vacations = cobject.types;
+      },
+    });
+
+    //get daysOff
+    $.ajax({
+      type: "POST",
+      url: cobject.apiUrl + "Hr_Portal/Employee_Vacation.aspx/getDaysOffData",
+      //data: JSON.stringify({ user: { Emp_id: cobject.user.Emp_id } }),
+      contentType: "application/json; charset=utf-8",
+      dataType: "json",
+      success: function (data) {
+        cobject.daysOff = JSON.parse(data.d);
       },
     });
 
@@ -1052,51 +986,52 @@ export default {
 </script>
 
 <style scoped>
-		.HideUpload {
-			opacity:0;
-			height:0 !important;
-			margin:0 !important;
-		}
-		.select-multi {
-			background-color: #fff;
-			padding: 5px 15px;
-			border-radius: 4px;
-			color: #666;
-			text-align: center;
-			border: 1px solid #e0e0e0;
-			transition: all .5s ease;
-			cursor: pointer;
-		}
-		.select-multi:hover {
-			background-color: #e0e0e0;
-		}
-		.ui-datepicker-clear-month {
-			position: absolute;
-			top: 9px;
-			right: 40px;
-			height: 100%;
-			line-height: 100%;
-			display: inline;
-			cursor: pointer;
-			color: red!important;
-		}
-		.ui-state-active, .ui-widget-content .ui-state-active{
-			background: #666 !important;
-			color: #fff !important;
-		}
-		.ui-datepicker {
-			width: 35em !important;
-			padding: .2em .2em 0;
-			display: none;
-		}
-		.ui-datepicker th {
-			padding: .4em .2em !important;
-		}
-		.ui-datepicker td a {
-			text-align: center !important;
-		}
-		.ui-widget {
-			font-family: inherit !important;
-			font-size: 1em !important;
-		}
-	</style>
+.HideUpload {
+  opacity: 0;
+  height: 0 !important;
+  margin: 0 !important;
+}
+.select-multi {
+  background-color: #fff;
+  padding: 5px 15px;
+  border-radius: 4px;
+  color: #666;
+  text-align: center;
+  border: 1px solid #e0e0e0;
+  transition: all 0.5s ease;
+  cursor: pointer;
+}
+.select-multi:hover {
+  background-color: #e0e0e0;
+}
+.ui-datepicker-clear-month {
+  position: absolute;
+  top: 9px;
+  right: 40px;
+  height: 100%;
+  line-height: 100%;
+  display: inline;
+  cursor: pointer;
+  color: red !important;
+}
+.ui-state-active,
+.ui-widget-content .ui-state-active {
+  background: #666 !important;
+  color: #fff !important;
+}
+.ui-datepicker {
+  width: 35em !important;
+  padding: 0.2em 0.2em 0;
+  display: none;
+}
+.ui-datepicker th {
+  padding: 0.4em 0.2em !important;
+}
+.ui-datepicker td a {
+  text-align: center !important;
+}
+.ui-widget {
+  font-family: inherit !important;
+  font-size: 1em !important;
+}
+</style>

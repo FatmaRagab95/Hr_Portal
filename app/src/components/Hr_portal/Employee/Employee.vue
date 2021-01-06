@@ -484,7 +484,7 @@ export default {
 			today: new Date().getDate() - 1,
             vacRequest:null,
 
-            apiUrl:"http://localhost:62477/app/dist/"
+            apiUrl:"http://localhost:56438/app/dist/"
         }
 	},   
 	beforeUpdate() {
