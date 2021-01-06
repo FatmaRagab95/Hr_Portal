@@ -6,6 +6,7 @@ import workRequest from '@/components/Hr_portal/workRequest/workRequest'
 import Employee from '@/components/Hr_portal/Employee/Employee'
 import vacationRequest from '@/components/Hr_portal/vacationRequest/vacationRequest'
 import employeeVacation from '@/components/Hr_portal/employeeVacation/employeeVacation'
+import vacationType from '@/components/Hr_portal/vacationType/vacationType'
 
 Vue.use(Router)
 
@@ -53,6 +54,14 @@ const router = new Router({
       path: '/employee-vacation',
       name: 'employeeVacation',
       component: employeeVacation,
+      meta: {
+        requiresAuth:false
+      }
+    },
+    {
+      path: '/vacation-type',
+      name: 'vacationType',
+      component: vacationType,
       meta: {
         requiresAuth:false
       }
