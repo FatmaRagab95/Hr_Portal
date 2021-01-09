@@ -7,6 +7,8 @@ import Employee from '@/components/Hr_portal/Employee/Employee'
 import vacationRequest from '@/components/Hr_portal/vacationRequest/vacationRequest'
 import employeeVacation from '@/components/Hr_portal/employeeVacation/employeeVacation'
 import vacationType from '@/components/Hr_portal/vacationType/vacationType'
+import employeeBalance from '@/components/Hr_portal/employeeBalance/employeeBalance'
+import Manger from '@/components/Hr_portal/Manger/Manger'
 
 Vue.use(Router)
 
@@ -62,6 +64,22 @@ const router = new Router({
       path: '/vacation-type',
       name: 'vacationType',
       component: vacationType,
+      meta: {
+        requiresAuth:false
+      }
+    },
+    {
+      path: '/employee-balance',
+      name: 'employeeBalance',
+      component: employeeBalance,
+      meta: {
+        requiresAuth:false
+      }
+    },
+    {
+      path: '/Manger',
+      name: 'Manger',
+      component: Manger,
       meta: {
         requiresAuth:false
       }

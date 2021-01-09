@@ -35,7 +35,7 @@
                   </label>
                   <div class="cu-input text-box">
                     <span class="fa fa-edit"></span>
-                    <input type="number" v-model="NewHR_Vacation_Type.Type_Id" />
+                    <input type="number" v-model="NewHR_Vacation_Type.id" />
                   </div>
                 </div>
               </div>
@@ -108,7 +108,7 @@ export default {
 
       NewHR_Vacation_Type: {
         Type_Name: "",
-        Type_Id: 0,
+        id: 0,
       },
 
       apiUrl: "http://localhost:56438/app/dist/",
@@ -129,6 +129,7 @@ export default {
         });
       } else {
         //ObjectD['Type_Name'] = this.types.filter(x => x['id'] == ObjectD['Type_Name'])[0].Type_Name;
+        //ObjectD["Type_Id"] = parseInt(ObjectD["id"]);
 
         $.ajax({
           type: "POST",
