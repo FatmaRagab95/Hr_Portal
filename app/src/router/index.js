@@ -9,6 +9,7 @@ import employeeVacation from '@/components/Hr_portal/employeeVacation/employeeVa
 import vacationType from '@/components/Hr_portal/vacationType/vacationType'
 import employeeBalance from '@/components/Hr_portal/employeeBalance/employeeBalance'
 import Manger from '@/components/Hr_portal/Manger/Manger'
+import hr from '@/components/Hr_portal/hr/hr'
 
 Vue.use(Router)
 
@@ -80,6 +81,14 @@ const router = new Router({
       path: '/Manger',
       name: 'Manger',
       component: Manger,
+      meta: {
+        requiresAuth:false
+      }
+    },
+    {
+      path: '/hr',
+      name: 'hr',
+      component: hr,
       meta: {
         requiresAuth:false
       }
