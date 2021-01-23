@@ -5,6 +5,11 @@ import home from '@/components/home'
 import workRequest from '@/components/Hr_portal/workRequest/workRequest'
 import Employee from '@/components/Hr_portal/Employee/Employee'
 import vacationRequest from '@/components/Hr_portal/vacationRequest/vacationRequest'
+import employeeVacation from '@/components/Hr_portal/employeeVacation/employeeVacation'
+import vacationType from '@/components/Hr_portal/vacationType/vacationType'
+import employeeBalance from '@/components/Hr_portal/employeeBalance/employeeBalance'
+import Manger from '@/components/Hr_portal/Manger/Manger'
+import hr from '@/components/Hr_portal/hr/hr'
 
 Vue.use(Router)
 
@@ -44,6 +49,46 @@ const router = new Router({
       path: '/vacation-request',
       name: 'vacationRequest',
       component: vacationRequest,
+      meta: {
+        requiresAuth:false
+      }
+    },
+    {
+      path: '/employee-vacation',
+      name: 'employeeVacation',
+      component: employeeVacation,
+      meta: {
+        requiresAuth:false
+      }
+    },
+    {
+      path: '/vacation-type',
+      name: 'vacationType',
+      component: vacationType,
+      meta: {
+        requiresAuth:false
+      }
+    },
+    {
+      path: '/employee-balance',
+      name: 'employeeBalance',
+      component: employeeBalance,
+      meta: {
+        requiresAuth:false
+      }
+    },
+    {
+      path: '/Manger',
+      name: 'Manger',
+      component: Manger,
+      meta: {
+        requiresAuth:false
+      }
+    },
+    {
+      path: '/hr',
+      name: 'hr',
+      component: hr,
       meta: {
         requiresAuth:false
       }

@@ -39,10 +39,11 @@ public partial class _Vacation_Request : basePageSessionExpire
         con.Close();*/
     }
 	
+    public int dept_id = 0;
 	
 	// get adminusers
     [WebMethod]
-    public static string getadminusersData()
+    public static string getadminusersData(int dept_id)
 
     {
         string config = Convert.ToString(ConfigurationManager.ConnectionStrings["dbcon"]);
@@ -53,10 +54,10 @@ public partial class _Vacation_Request : basePageSessionExpire
 
         con.Open();
 
-        using (SqlCommand cmd = new SqlCommand("Select * from adminusers where Dept_id = " + HttpContext.Current.Session["Dept_id"], con))
+        using (SqlCommand cmd = new SqlCommand("Select * from adminusers where Dept_id = @dept_id", con))
 
         {
-
+            cmd.Parameters.Add("@dept_id", SqlDbType.Int).Value = dept_id;
             SqlDataReader idr = cmd.ExecuteReader();
 
             if (idr.HasRows)
@@ -187,11 +188,13 @@ public partial class _Vacation_Request : basePageSessionExpire
 
         con.Open();
 
-        using (SqlCommand cmd = new SqlCommand("Select * from HR_DaysOFF_Requests where Emp_id = @Emp_id and ExpirationDate > GETDATE() and Canceled <> 'True' and Status = 4 and Dept_id =" + HttpContext.Current.Session["Dept_id"], con))
+        using (SqlCommand cmd = new SqlCommand("Select * from HR_DaysOFF_Requests where Emp_id = @Emp_id and ExpirationDate > GETDATE() and Canceled <> 'True' and Status = 4 and Dept_id = @Dept_id", con))
 
         {
 			cmd.Parameters.AddWithValue("@Emp_id", detail.Emp_id);
+            cmd.Parameters.AddWithValue("@Dept_id", detail.Dept_id);
             SqlDataReader idr = cmd.ExecuteReader();
+
 
             if (idr.HasRows)
 
@@ -262,6 +265,7 @@ public partial class _Vacation_Request : basePageSessionExpire
     {
 		public int id { get; set; }
         public int Emp_id { get; set; }
+        public int Dept_id { get; set; }
 		public string Date_From { get; set; }
         public int Status { get; set; }
       
@@ -362,7 +366,7 @@ public partial class _Vacation_Request : basePageSessionExpire
 						cmd.Parameters.Add("@Requester_Comment", SqlDbType.VarChar).Value = HR_Vacations_Request.Requester_Comment;
 						cmd.Parameters.Add("@Attach_File", SqlDbType.VarChar).Value = HR_Vacations_Request.Attach_File;
 						cmd.Parameters.Add("@Status", SqlDbType.Int).Value = 1;
-						cmd.Parameters.Add("@Dept_id", SqlDbType.Int).Value = HttpContext.Current.Session["Dept_id"];
+						cmd.Parameters.Add("@Dept_id", SqlDbType.Int).Value = HR_Vacations_Request.Dept_id ;
 						cmd.Parameters.Add("@OFF_Day", SqlDbType.Int).Value = HR_Vacations_Request.OFF_Day;
   
                     	NewId = Convert.ToInt32(cmd.ExecuteScalar());
@@ -391,6 +395,7 @@ public partial class _Vacation_Request : basePageSessionExpire
 		public string Requester_Comment { get; set; }
 		public string Attach_File { get; set; }
 		public int OFF_Day { get; set; }
+		public int Dept_id { get; set; }
 		public DateTime Entry_date { get; set; }
     }
 	
